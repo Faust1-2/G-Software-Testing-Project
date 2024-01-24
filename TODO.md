@@ -39,12 +39,12 @@
   - [] 	Confirm that an employee can be added to a team.
   - [] 	Validate the employee's association with the correct team.
   - [] 	Check for proper handling when adding an employee to multiple teams.
-- [] 	List All Teams
-  - [] 	Verify that all created teams are listed.
-  - [] 	Check for accurate display of team information.
-  - [] 	Validate pagination if applicable.
-- [] 	Delete a Team
-  - [] 	Verify that the team is correctly deleted.
+- [x] 	List All Teams
+  - [x] 	Verify that all created teams are listed.
+  - [x] 	Check for accurate display of team information.
+  - [x] 	Validate pagination if applicable.
+- [x] 	Delete a Team
+  - [x] 	Verify that the team is correctly deleted.
   - [] 	Verify the team members have no team after team deletion.
   - [] 	Validate pagination if applicable.
 

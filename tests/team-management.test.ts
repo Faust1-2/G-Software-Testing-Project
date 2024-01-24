@@ -2,8 +2,8 @@ import { test, expect, type Page } from '@playwright/test';
 import { before, beforeEach, describe } from 'node:test';
 import { $ } from '../test-utils';
 
-describe('Team management tests',  () => {
-  describe('Create a team', () => {
+test.describe('Team management tests', () => {
+  test.describe('Create a team', () => {
 
     test.beforeEach(async ({ page }) => {
       await page.goto($('add_team'));
@@ -17,7 +17,7 @@ describe('Team management tests',  () => {
 
       await page.goto($('teams'));
       await page.waitForURL($('teams'));
-      
+
       const texts = await page.getByRole('table').allInnerTexts();
       expect(texts[0]).toContain(teamName);
     });
@@ -40,14 +40,54 @@ describe('Team management tests',  () => {
   });
 
   describe('Add employee to a team', () => {
-
+    // const team = 'EmployeeTeam';
+    // test.beforeEach(async ({ page }) => {
+    //   await page.goto($('add_team'));
+    //   const field = page.getByPlaceholder('Name');
+    //   await field.fill(team);
+    //   await field.press('Enter');
+    //   await page.goto('employees');
+    // })
   });
 
-  describe('List all teams', () => {
-    
+  test.describe('List all teams', () => {
+    const teams = ['team1', 'team2', 'team3'];
+
+    test.beforeEach(async ({ page }) => {
+      for (const team of teams) {
+        await page.goto($('add_team'));
+        const field = page.getByPlaceholder('Name');
+        await field.fill(team);
+        await field.press('Enter');
+      };
+      await page.goto($('teams'));
+    });
+
+    test('It should list all teams', async ({ page }) => {
+      const texts = await page.getByRole('table').allInnerTexts();
+
+      for (const team of teams) {
+        expect(texts[0]).toContain(team);
+      }
+    });
   });
 
   describe('Delete a team', () => {
+    const team = 'teamToDelete';
 
+    test.beforeEach(async ({ page }) => {
+      await page.goto($('add_team'));
+      const field = page.getByPlaceholder('Name');
+      await field.fill(team);
+      await field.press('Enter');
+      await page.goto($('teams'));
+    });
+
+    test('It should delete the seletected team', async ({ page }) => {
+      const locator = page.locator('tr', { hasText: team }).locator('.btn');
+      await locator.click();
+      await page.getByRole('button').click();
+      expect((await page.getByRole('table').allInnerTexts())[0]).not.toContain(team);
+    });
   });
 });

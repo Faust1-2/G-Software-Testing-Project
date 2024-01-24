@@ -1,6 +1,4 @@
 import {Page} from "@playwright/test";
-
-
 export const baseURL= "https://g.hr.dmerej.info/";
 export function _(path: string) {
     return baseURL + path;

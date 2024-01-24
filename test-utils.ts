@@ -1,6 +1,5 @@
 import {Page} from "@playwright/test";
 
-
 export const baseURL= "https://g.hr.dmerej.info/";
 export function _(path: string) {
     return baseURL + path;
@@ -34,16 +33,17 @@ export function getRandomEmail() {
     return `_${username}@_${domain}`;
 }
 
+
 // Function to fill form with a wrong email
-export async function fillAddUserWithTestData(page: Page, testData: Partial<Employee>) {
-    const idName = page.getByRole("textbox", {name: "name"});
-    const idEmail = page.getByRole("textbox", {name: "email"});
-    const idAddressLine1 = page.getByRole("textbox", {name: "address_line1"});
-    const idAddressLine2 = page.getByRole("textbox", {name: "address_line2"});
-    const idCity = page.getByRole("textbox", {name: "city"});
-    const idZipCode = page.getByRole("textbox", {name: "zip_code"});
-    const idHiringDate = page.getByRole("textbox", {name: "hiring_date"});
-    const idJobTitle = page.getByRole("textbox", {name: "job_title"});
+export async function fillAddUserWithTestData(page: Page, testData?: Partial<Employee>) {
+    const idName = page.locator('input[name="name"]');
+    const idEmail = page.locator('input[name="email"]');
+    const idAddressLine1 = page.locator('input[name="address_line1"]');
+    const idAddressLine2 = page.locator('input[name="address_line2"]');
+    const idCity = page.locator('input[name="city"]');
+    const idZipCode = page.locator('input[name="zip_code"]');
+    const idHiringDate = page.locator('input[name="hiring_date"]');
+    const idJobTitle = page.locator('input[name="job_title"]');
 
     const name = testData.name ?? getRandomString(10);
     const email = testData.email ?? getRandomEmail();
@@ -75,7 +75,7 @@ export async function fillAddUserWithTestData(page: Page, testData: Partial<Empl
     }
 }
 
-export async function addUser(page: Page, testData: Partial<Employee>) {
+export async function addUser(page: Page, testData?: Partial<Employee>) {
     await page.goto(_("add_employee"));
     const user = await fillAddUserWithTestData(page, testData);
     await page.locator("button").getByText("Add").click();

@@ -1,12 +1,13 @@
-import { test, expect, type Page } from '@playwright/test';
-import { before, beforeEach, describe } from 'node:test';
-import { $ } from '../test-utils';
+import { test, expect } from '@playwright/test';
+import {  describe } from 'node:test';
+import { Employee, _, addUser } from '../test-utils';
+import dayjs from 'dayjs';
 
 test.describe('Team management tests', () => {
   test.describe('Create a team', () => {
 
     test.beforeEach(async ({ page }) => {
-      await page.goto($('add_team'));
+      await page.goto(_('add_team'));
     })
 
     test('A team should be added', async ({ page }) => {
@@ -15,8 +16,8 @@ test.describe('Team management tests', () => {
       await field.fill(teamName);
       await field.press('Enter');
 
-      await page.goto($('teams'));
-      await page.waitForURL($('teams'));
+      await page.goto(_('teams'));
+      await page.waitForURL(_('teams'));
 
       const texts = await page.getByRole('table').allInnerTexts();
       expect(texts[0]).toContain(teamName);
@@ -28,7 +29,7 @@ test.describe('Team management tests', () => {
       await first_add.fill(teamName);
       await first_add.press('Enter')
 
-      await page.goto($('add_team'));
+      await page.goto(_('add_team'));
 
       const second_add = page.getByPlaceholder('Name');
       await second_add.fill(teamName);
@@ -39,15 +40,32 @@ test.describe('Team management tests', () => {
     });
   });
 
-  describe('Add employee to a team', () => {
-    // const team = 'EmployeeTeam';
-    // test.beforeEach(async ({ page }) => {
-    //   await page.goto($('add_team'));
-    //   const field = page.getByPlaceholder('Name');
-    //   await field.fill(team);
-    //   await field.press('Enter');
-    //   await page.goto('employees');
-    // })
+  test.describe('Add employee to a team', () => {
+    const team = 'EmployeeTeam';
+    const employeeData: Employee = {
+      name: 'Employee in a team',
+      email: 'emp.in@a.team',
+      addressLine1: 'company',
+      addressLine2: 'building',
+      city: 'company city',
+      hiringDate: dayjs().toString(),
+      job: 'Being an employee (in a team)',
+      zipCode: '42150'
+    }
+
+    test.beforeEach(async ({ page }) => {
+      await addUser(page, employeeData);
+      await page.goto(_('add_team'));
+      const field = page.getByPlaceholder('Name');
+      await field.fill(team);
+      await field.press('Enter');
+      await page.goto('employees');
+    });
+
+    test('it should add an employee to a team', async({ page }) => {
+      const locator = page.locator('tr', { hasText: employeeData.name }).locator('.btn', { hasText: 'Edit'});
+      console.log(await locator.innerHTML());
+    });
   });
 
   test.describe('List all teams', () => {
@@ -55,12 +73,12 @@ test.describe('Team management tests', () => {
 
     test.beforeEach(async ({ page }) => {
       for (const team of teams) {
-        await page.goto($('add_team'));
+        await page.goto(_('add_team'));
         const field = page.getByPlaceholder('Name');
         await field.fill(team);
         await field.press('Enter');
       };
-      await page.goto($('teams'));
+      await page.goto(_('teams'));
     });
 
     test('It should list all teams', async ({ page }) => {
@@ -76,11 +94,11 @@ test.describe('Team management tests', () => {
     const team = 'teamToDelete';
 
     test.beforeEach(async ({ page }) => {
-      await page.goto($('add_team'));
+      await page.goto(_('add_team'));
       const field = page.getByPlaceholder('Name');
       await field.fill(team);
       await field.press('Enter');
-      await page.goto($('teams'));
+      await page.goto(_('teams'));
     });
 
     test('It should delete the seletected team', async ({ page }) => {

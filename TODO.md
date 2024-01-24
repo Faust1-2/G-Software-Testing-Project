@@ -31,10 +31,10 @@
 
 # Team Management
 
-- [] 	Create Team
-  - [] 	Verify that a new team can be created.
+- [x] 	Create Team
+  - [x] 	Verify that a new team can be created.
   - [] 	Check for proper handling of team name validation.
-  - [] 	Ensure teams are unique.
+  - [x] 	Ensure teams are unique.
 - [] 	Add Employee to Team
   - [] 	Confirm that an employee can be added to a team.
   - [] 	Validate the employee's association with the correct team.

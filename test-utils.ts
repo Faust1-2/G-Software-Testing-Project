@@ -33,8 +33,9 @@ export function getRandomEmail() {
     return `_${username}@_${domain}`;
 }
 
+
 // Function to fill form with a wrong email
-export async function fillAddUserWithTestData(page: Page, testData: Partial<Employee>) {
+export async function fillAddUserWithTestData(page: Page, testData?: Partial<Employee>) {
     const idName = page.getByRole("textbox", {name: "name"});
     const idEmail = page.getByRole("textbox", {name: "email"});
     const idAddressLine1 = page.getByRole("textbox", {name: "address_line1"});
@@ -74,7 +75,7 @@ export async function fillAddUserWithTestData(page: Page, testData: Partial<Empl
     }
 }
 
-export async function addUser(page: Page, testData: Partial<Employee>) {
+export async function addUser(page: Page, testData?: Partial<Employee>) {
     await page.goto(_("add_employee"));
     const user = await fillAddUserWithTestData(page, testData);
     await page.locator("button").getByText("Add").click();
